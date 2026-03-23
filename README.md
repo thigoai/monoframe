@@ -1,6 +1,8 @@
 # monoframe
 
-A transparent window that applies real-time image processing to whatever is on your screen — built for learning and experimenting with OpenCV.
+A transparent window that applies real-time image processing to whatever is on your screen. 
+
+Built for learning and experimenting with OpenCV.
 
 
 ## Installation
