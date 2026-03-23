@@ -1,0 +1,12 @@
+[project]
+name = "monoframe"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "cv>=1.0.0",
+    "mss>=10.1.0",
+    "opencv-python-headless>=4.13.0.92",
+    "pyqt5>=5.15.11",
+]
