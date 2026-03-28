@@ -16,6 +16,7 @@ Requires [uv](https://github.com/astral-sh/uv).
 ```bash
 git clone https://github.com/thigoai/monoframe
 cd monoframe
+uv sync
 uv run src/main.py
 ```
 
