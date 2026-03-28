@@ -1,5 +1,9 @@
 # monoframe
 
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/db41b578-9b9b-4d6b-ab0c-6217ec6552ff" width="500">
+</p>
+
 A transparent window that applies real-time image processing to whatever is on your screen. 
 
 Built for learning and experimenting with OpenCV.
