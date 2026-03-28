@@ -13,7 +13,7 @@ from core.filters import AVAILABLE_FILTERS
 class FilterLens(QLabel):
     def __init__(self):
         super().__init__()
-        self.setWindowFlag(Qt.Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.resize(350, 200)
 
