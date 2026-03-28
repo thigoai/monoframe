@@ -15,6 +15,6 @@ def canny_filter(img, intensity):
 
 AVAILABLE_FILTERS = {
     "None": none_filter,
-    "Limiar": limiar_filter,
-    "Edge (Canny)": canny_filter
+    "Limiar": limiar_filter
+    #"Edge (Canny)": canny_filter
 }
