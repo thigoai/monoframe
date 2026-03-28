@@ -10,7 +10,10 @@ def canny_filter(img, intensity):
     edges = cv2.Canny(gray, intensity, intensity + 100)
     return edges
 
+def none_filter(img, intensity):
+    return cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
+
 AVAILABLE_FILTERS = {
     "Limiar": limiar_filter,
-    "Edge (Canny)": canny_filter
+    "None": none_filter
 }
