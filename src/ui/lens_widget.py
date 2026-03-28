@@ -52,4 +52,18 @@ class FilterLens(QLabel):
         if qimg:
             self.setPixmap(QPixmap.fromImage(qimg))
 
-            
+    def paintEnvent(self, event):
+        super().paintEvent(event)
+
+        painter = QPainter(self)
+        painter.setPen(QColor(0, 255, 0))
+        painter.setFont(QFont("Consolas", 10, QFont.bold))
+
+        filer_name = self,self.filter_names[self.current_filter_idx]
+        text = f" {filer_name} | {self.parameter:03d} | dly: {self.delay_ms}ms "
+
+        painter.fillRect(5,5,290,20, QColor(0,0,0,160))
+        painter.drawText(10, 20, text)
+        painter.end()
+
+    
