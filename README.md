@@ -21,3 +21,17 @@ uv run src/main.py
 ```
 
 Dependencies are declared in `pyproject.toml` and installed automatically by `uv`.
+
+## 🗁 Project Structure
+ 
+```
+monoframe/
+├── src/
+│   ├── core/
+│   │   ├── capturer.py       
+│   │   ├── filters.py       
+│   │   └── vision_engine.py 
+│   └── ui/
+│       ├── lens_widget.py    
+│       └── main.py          
+```
