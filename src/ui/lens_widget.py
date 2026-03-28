@@ -66,4 +66,34 @@ class FilterLens(QLabel):
         painter.drawText(10, 20, text)
         painter.end()
 
-    
+    def wheelEvent(self, event):
+        delta = 5 if event.angleDelta().y() > 0 else -5
+        self.intensity = max(0, min(255, self.intensity + delta))
+
+    def keyPressEvent(self, event):
+        k = event.key()
+        if k in (Qt.Key_Escape, Qt.Key_Q):
+            self.close()
+        elif k == Qt.Key_Up:
+            self.delay_ms += 30
+        elif k == Qt.Key_Down:
+            self.delay_ms = max(0, self.delay_ms - 30)
+        elif k == Qt.Key_F: # change the filter
+            self.current_filter_idx = (self.current_filter_idx + 1) % len(self.filter_names)
+        elif k == Qt.Key_S:
+            if self.engine.current_frame is not None:
+                agora = datetime.now().strftime('%H%M%S')
+                cv2.imwrite(f"img_{agora}.png", self.engine.current_frame)
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.drag_pos = event.globalPos()
+
+    def mouseMoveEvent(self, event):
+        if self.drag_pos:
+            diff = event.globalPos() - self.drag_pos
+            self.move(self.pos() + diff)
+            self.drag_pos = event.globalPos()
+
+    def mouseReleaseEvent(self, event):
+        self.drag_pos = None
