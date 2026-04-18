@@ -52,14 +52,14 @@ class FilterLens(QLabel):
         if qimg:
             self.setPixmap(QPixmap.fromImage(qimg))
 
-    def paintEnvent(self, event):
+    def paintEvent(self, event):
         super().paintEvent(event)
 
         painter = QPainter(self)
         painter.setPen(QColor(0, 255, 0))
-        painter.setFont(QFont("Consolas", 10, QFont.bold))
+        painter.setFont(QFont("Consolas", 10, QFont.Bold))
 
-        filer_name = self,self.filter_names[self.current_filter_idx]
+        filer_name = self.filter_names[self.current_filter_idx]
         text = f" {filer_name} | {self.parameter:03d} | dly: {self.delay_ms}ms "
 
         painter.fillRect(5,5,290,20, QColor(0,0,0,160))
@@ -68,7 +68,7 @@ class FilterLens(QLabel):
 
     def wheelEvent(self, event):
         delta = 5 if event.angleDelta().y() > 0 else -5
-        self.intensity = max(0, min(255, self.intensity + delta))
+        self.parameter = max(0, min(255, self.intensity + delta))
 
     def keyPressEvent(self, event):
         k = event.key()
