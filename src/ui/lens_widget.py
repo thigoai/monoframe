@@ -1,6 +1,7 @@
 import time
 import cv2
 from datetime import datetime
+from enum import Enum, auto
 
 from PyQt5.QtWidgets import QApplication, QLabel
 from PyQt5.QtCore import Qt, QTimer
@@ -9,6 +10,10 @@ from PyQt5.QtGui import QPixmap, QPainter, QColor, QFont
 from core.capturer import ScreenCapturer
 from core.vision_engine import VisionEngine
 from core.filters import AVAILABLE_FILTERS
+
+class AppState(Enum):
+    RUNNING = auto()
+    PAUSED = auto()
 
 class FilterLens(QLabel):
     def __init__(self):
@@ -27,30 +32,39 @@ class FilterLens(QLabel):
         self.capturer = ScreenCapturer()
         self.engine = VisionEngine()
 
+        self.state = AppState.RUNNING
+
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_frame)
         self.timer.start(30)
 
     def update_frame(self):
+        if self.state == AppState.PAUSED:
+            self.update() 
+            return
+
+        if self.state == AppState.RUNNING:
+            self.setWindowOpacity(0.0)
+            
+            QTimer.singleShot(10, self._perform_capture)
+
+    def _perform_capture(self):
+        if self.state != AppState.RUNNING:
+            return
+
         sw = QApplication.primaryScreen().size().width()
         sh = QApplication.primaryScreen().size().height()
-
-        self.setWindowOpacity(0.0)
-        QApplication.processEvents()
-        time.sleep(0.02)
-
         raw_img = self.capturer.grab(self.x(), self.y(), self.width(), self.height(), sw, sh)
+
         self.setWindowOpacity(1.0)
 
-        if raw_img is None:
-            return
-        
-        active_filter_name = self.filter_names[self.current_filter_idx]
-        active_filter_func = AVAILABLE_FILTERS[active_filter_name]
+        if raw_img is not None:
+            active_filter_name = self.filter_names[self.current_filter_idx]
+            active_filter_func = AVAILABLE_FILTERS[active_filter_name]
 
-        qimg = self.engine.process(raw_img, active_filter_func, self.parameter, self.delay_ms)
-        if qimg:
-            self.setPixmap(QPixmap.fromImage(qimg))
+            qimg = self.engine.process(raw_img, active_filter_func, self.parameter, self.delay_ms)
+            if qimg:
+                self.setPixmap(QPixmap.fromImage(qimg))
 
     def paintEvent(self, event):
         super().paintEvent(event)
@@ -74,11 +88,16 @@ class FilterLens(QLabel):
         k = event.key()
         if k in (Qt.Key_Escape, Qt.Key_Q):
             self.close()
+        elif k == Qt.Key_Space: 
+            if self.state == AppState.PAUSED:
+                self.state = AppState.RUNNING
+            else:
+                self.state = AppState.PAUSED
         elif k == Qt.Key_Up:
             self.delay_ms += 30
         elif k == Qt.Key_Down:
             self.delay_ms = max(0, self.delay_ms - 30)
-        elif k == Qt.Key_F: # change the filter
+        elif k == Qt.Key_F: 
             self.current_filter_idx = (self.current_filter_idx + 1) % len(self.filter_names)
         elif k == Qt.Key_S:
             if self.engine.current_frame is not None:
